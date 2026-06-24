@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Exam PDF</title>
+  <style>
+    body { font-family: DejaVu Sans, 'Noto Sans Bengali', sans-serif; color: #222; margin: 0; padding: 0; }
+    .header { text-align: center; margin-bottom: 18px; }
+    .report-badge { display:inline-block; background:#e8eefb; padding:8px 18px; border-radius:12px; color:#1a56db; font-weight:700; margin-bottom:8px; }
+    .meta { color:#666; font-size:13px; }
+    table { width:100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { padding:8px 6px; border:1px solid #ddd; font-size:12px; }
+    th { background:#f3f4f6; }
+    tbody tr:nth-child(even) { background:#fafafa; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="report-badge">Lab &amp; Theory Performance Evaluation System</div>
+    <h1 style="margin:8px 0 6px;font-size:20px">{{ dept_name or '' }} — {{ exam_type|upper }} Report</h1>
+    <div class="meta">তারিখ: {{ generated_on or '' }} | ব্যাচ: {{ batch or 'সব' }}</div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Batch</th>
+        <th>Subject Code</th>
+        <th>Subject Name</th>
+        {% if exam_type == 'lab' %}
+          <th>Attendance</th>
+          <th>Lab Report</th>
+          <th>Viva</th>
+          <th>Practical</th>
+        {% else %}
+          <th>Attendance</th>
+          <th>Assignment</th>
+          <th>Class Test</th>
+          <th>Quiz</th>
+          <th>Presentation</th>
+        {% endif %}
+        <th>Mid Exam</th>
+        <th>Final Exam</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in marks %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ row.student_id or '-' }}</td>
+          <td>{{ row.name or '-' }}</td>
+          <td>{{ row.batch or '-' }}</td>
+          <td>{{ row.subject_code or '-' }}</td>
+          <td>{{ row.subject_name or '-' }}</td>
+          {% if exam_type == 'lab' %}
+            <td>{{ row.attendance or 0 }}</td>
+            <td>{{ row.lab_report or 0 }}</td>
+            <td>{{ row.viva or 0 }}</td>
+            <td>{{ row.practical or 0 }}</td>
+          {% else %}
+            <td>{{ row.attendance or 0 }}</td>
+            <td>{{ row.assignment or 0 }}</td>
+            <td>{{ row.class_test or 0 }}</td>
+            <td>{{ row.quiz or 0 }}</td>
+            <td>{{ row.presentation or 0 }}</td>
+          {% endif %}
+          <td>{{ row.mid_exam or 0 }}</td>
+          <td>{{ row.final_exam or 0 }}</td>
+          <td>{{ row.total or 0 }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="{{ 13 if exam_type == 'lab' else 14 }}" style="text-align:center;color:#666;padding:18px">No marks found for selected criteria.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

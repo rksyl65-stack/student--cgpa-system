@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Batch CGPA</title>
+  <style>
+    body { font-family: DejaVu Sans, 'Noto Sans Bengali', sans-serif; color: #222; margin: 0; padding: 24px; }
+    .header { text-align:center; margin-bottom:18px; }
+    .badge { display:inline-block; background:#e8eefb; padding:8px 16px; border-radius:12px; color:#1a56db; font-weight:700; margin-bottom:8px; }
+    .meta { color:#666; font-size:13px; }
+    table { width:100%; border-collapse: collapse; margin-top:16px; }
+    th, td { padding:10px 8px; border:1px solid #ddd; font-size:13px; }
+    th { background:#f3f4f6; }
+    tbody tr:nth-child(even) { background:#fafafa; }
+    .footer { margin-top:14px; text-align:right; font-weight:700; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="badge">Lab &amp; Theory Performance Evaluation System</div>
+    <h1 style="margin:8px 0 6px;font-size:20px">Batch CGPA Report</h1>
+    <div class="meta">{{ dept_name or '' }} | তারিখ: {{ generated_on or '' }} | ব্যাচ: {{ batch or '' }}</div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Batch</th>
+        <th>CGPA</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in students %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ s.student_id }}</td>
+          <td>{{ s.name }}</td>
+          <td>{{ s.batch }}</td>
+          <td>{{ '%.2f'|format(s.cgpa or 0) }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5" style="text-align:center;color:#666;padding:18px">No students found for selected batch.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="footer">Total Students: {{ students|length }}</div>
+</body>
+</html>
